@@ -1,0 +1,101 @@
+
+#include <Stepper.h>
+int trigPin = 13;
+int echoPin = 12;
+int delayTime = 20;
+int i;
+int motorPin1 = 8;          
+int motorPin2 = 9;
+int motorPin3 = 10;
+int motorPin4 = 11;
+void setup() {
+  Serial.begin(9600);
+   pinMode(motorPin1, OUTPUT);
+  pinMode(motorPin2, OUTPUT);
+  pinMode(motorPin3, OUTPUT);
+  pinMode(motorPin4, OUTPUT);
+}
+int sensor()
+{
+long duration;
+  float cm;
+  pinMode(echoPin, INPUT);
+  pinMode(trigPin, OUTPUT);
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+  cm = microsecondsToCentimeters(duration);
+  Serial.print(cm);
+  Serial.print("cm");
+  Serial.println();
+  delay(5);
+  return(cm);
+} 
+float microsecondsToCentimeters(long microseconds){
+  return (microseconds*0.034029)/2;}
+
+int ileri(){
+  int deg = sensor();
+  int yap1= deg-8;
+  for (i=0; i<yap1; i++)
+  {
+   digitalWrite(motorPin1, HIGH);
+  digitalWrite(motorPin2, LOW);
+  digitalWrite(motorPin3, LOW);
+  digitalWrite(motorPin4, LOW);
+  delay(delayTime);
+  digitalWrite(motorPin1, LOW);
+  digitalWrite(motorPin2, HIGH);
+  digitalWrite(motorPin3, LOW);
+  digitalWrite(motorPin4, LOW);
+  delay(delayTime);
+  digitalWrite(motorPin1, LOW);
+  digitalWrite(motorPin2, LOW);
+  digitalWrite(motorPin3, HIGH);
+  digitalWrite(motorPin4, LOW);
+  delay(delayTime);
+  digitalWrite(motorPin1, LOW);
+  digitalWrite(motorPin2, LOW);
+  digitalWrite(motorPin3, LOW);
+  digitalWrite(motorPin4, HIGH);
+  delay(delayTime);}
+
+}
+
+int geri(){  int deg = sensor();
+  int yap2= 8-deg;
+  for (i=0; i<yap2; i++)
+  {
+  digitalWrite(motorPin1, LOW);
+  digitalWrite(motorPin2, LOW);
+  digitalWrite(motorPin3, LOW);
+  digitalWrite(motorPin4, HIGH);
+  delay(delayTime);
+  digitalWrite(motorPin1, LOW);
+  digitalWrite(motorPin2, LOW);
+  digitalWrite(motorPin3, HIGH);
+  digitalWrite(motorPin4, LOW);
+  delay(delayTime);
+  digitalWrite(motorPin1, LOW);
+  digitalWrite(motorPin2, HIGH);
+  digitalWrite(motorPin3, LOW);
+  digitalWrite(motorPin4, LOW);
+  delay(delayTime);
+   digitalWrite(motorPin1, HIGH);
+  digitalWrite(motorPin2, LOW);
+  digitalWrite(motorPin3, LOW);
+  digitalWrite(motorPin4, LOW);
+  delay(delayTime);}
+}
+
+void loop(){
+int deg = sensor();
+if (deg>8)
+ileri();
+if (8>deg)
+geri();
+  
+}
